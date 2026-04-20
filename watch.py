@@ -199,16 +199,61 @@ def _main_text(page_html: str) -> str:
     return html.unescape(body)
 
 
+# og:description sometimes falls back to the site-wide boilerplate. When it
+# does, lift the real first sentence out of the article body instead.
+_GENERIC_DESC_MARKERS = (
+    "Anthropic is an AI safety and research company",
+)
+
+
+def _is_useful_desc(desc: str, title: str) -> bool:
+    if not desc:
+        return False
+    d = desc.strip()
+    if d == title.strip():
+        return False
+    return not any(m in d for m in _GENERIC_DESC_MARKERS)
+
+
+def _first_sentence_from_body(body: str, title: str) -> str:
+    """Skip past breadcrumb/title/date and return the first real sentence(s)."""
+    rest = body
+    # Anthropic posts render "Mon D, YYYY" or "Month D, YYYY" right before the
+    # article text. Slice after the date if present.
+    m = re.search(
+        r"\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},\s+\d{4}\s+",
+        body,
+    )
+    if m:
+        rest = body[m.end():]
+    elif title and title in body[:400]:
+        rest = body[body.index(title) + len(title):].lstrip()
+    # Take first sentence(s) up to ~280 chars.
+    out = ""
+    for s in re.split(r"(?<=[.!?])\s+", rest):
+        if not s:
+            continue
+        if out and len(out) + len(s) > 280:
+            break
+        out = (out + " " + s).strip() if out else s
+        if len(out) > 140:
+            break
+    return out
+
+
 def fetch_article_meta(url: str) -> dict:
-    """Return {title, summary, body} using og tags when available."""
+    """Return {title, summary, body} using og tags when available,
+    falling back to the article's first sentence when og:description is
+    the site-wide boilerplate or a duplicate of the title."""
     try:
         page_html = http_get(url)
     except Exception as e:
         return {"title": "", "summary": f"(failed to fetch: {e})", "body": ""}
     title = _meta_content(page_html, "og:title") or _title_tag(page_html)
     title = _strip_anthropic_suffix(title)
-    summary = _meta_content(page_html, "og:description") or _meta_content(page_html, "description")
+    og_desc = _meta_content(page_html, "og:description") or _meta_content(page_html, "description")
     body = _main_text(page_html)[:2000]
+    summary = og_desc if _is_useful_desc(og_desc, title) else _first_sentence_from_body(body, title)
     return {"title": title, "summary": summary, "body": body}
 
 
