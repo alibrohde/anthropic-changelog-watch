@@ -38,7 +38,7 @@ HEARTBEAT_DAYS = 7
 ROOT = Path(__file__).resolve().parent
 STATE_PATH = ROOT / "state.json"
 LOG_PATH = ROOT / "watch.log"
-USER_AGENT = "anthropic-changelog-watch/0.1 (+https://github.com/alibrohde/anthropic-changelog-watch)"
+USER_AGENT = "claude-catcher/0.1 (+https://github.com/alibrohde/claude-catcher)"
 
 SOURCES = [
     {

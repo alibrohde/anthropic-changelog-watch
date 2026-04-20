@@ -3,7 +3,7 @@
 Copy everything between the fences below, paste it into a new Claude Code session in your forked repo, and let Claude drive the setup.
 
 ```
-You are setting up anthropic-changelog-watch for me. Repo cloned locally, I'm the owner on GitHub. Goal: get a GitHub Actions cron running every 2 hours that emails me when Anthropic ships a new Claude Code / SDK release or news post.
+You are setting up Claude Catcher (claude-catcher) for me. Repo cloned locally, I'm the owner on GitHub. Goal: get a GitHub Actions cron running every 2 hours that emails me when Anthropic ships a new Claude Code / SDK release or news post.
 
 Please do these steps, asking me only when you genuinely need input:
 

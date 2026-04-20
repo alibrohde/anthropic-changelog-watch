@@ -17,7 +17,7 @@ Usage:
 Pipe it straight into `gh secret set` so it never hits your clipboard:
 
   python3 tools/get_refresh_token.py client.json \\
-    | gh secret set GOOGLE_REFRESH_TOKEN --repo you/anthropic-changelog-watch
+    | gh secret set GOOGLE_REFRESH_TOKEN --repo you/claude-catcher
 
 You'll also need to set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET as
 secrets — both are in the same JSON file you passed in.

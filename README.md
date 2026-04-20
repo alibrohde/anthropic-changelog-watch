@@ -1,6 +1,6 @@
-# anthropic-changelog-watch
+# Claude Catcher
 
-Anthropic ships constantly. This is how I stopped missing it.
+Anthropic ships constantly. Claude Catcher is how I stopped missing it.
 
 Fork this repo. Hand it to Claude Code with one prompt. Twenty minutes later you get an email every time Anthropic adds a Claude Code release, an SDK release, a news post, or an engineering-blog post. Silent when nothing ships.
 
