@@ -224,12 +224,21 @@ def collect_new(state):
             continue
         for e in entries:
             key = e["id"]
-            h = entry_hash(e)
-            if seen.get(key) == h:
-                continue
-            if src["kind"] == "link_index" and not e["body"]:
+            if src["kind"] == "link_index":
+                # Presence-only dedup: the URL is the identity, body is fetched
+                # only when the slug is genuinely new. Skips editing-detection
+                # on existing articles in exchange for stable dedup and 0 extra
+                # HTTP on steady-state runs.
+                if key in seen:
+                    continue
                 e["body"] = fetch_article_body(e["url"])
+                h = "1"  # sentinel — any non-empty value is fine
+            else:
+                # changelog_md: body-hash dedup catches edits to an existing
+                # version entry (e.g. a typo fix in a release note).
                 h = entry_hash(e)
+                if seen.get(key) == h:
+                    continue
             e["source"] = src["name"]
             e["_key"] = key
             e["_hash"] = h
