@@ -1,0 +1,5 @@
+watch.log
+__pycache__/
+*.pyc
+.env
+com.ali.*.plist
