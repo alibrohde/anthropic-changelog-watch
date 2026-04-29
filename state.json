@@ -1,6 +1,6 @@
 {
-  "last_activity_ts": "2026-04-28T11:09:18+00:00",
-  "last_email_ts": "2026-04-28T11:09:18+00:00",
+  "last_activity_ts": "2026-04-29T11:01:06+00:00",
+  "last_email_ts": "2026-04-29T11:01:06+00:00",
   "seen": {
     "claude-code::0.2.100": "5214220e87082a18",
     "claude-code::0.2.102": "cdb33496705b9a49",
@@ -200,6 +200,8 @@
     "claude-code::2.1.12": "1debc10251123bf6",
     "claude-code::2.1.120": "1d0ab6125b07d791",
     "claude-code::2.1.121": "235479346f358547",
+    "claude-code::2.1.122": "3e5c2f98372ab407",
+    "claude-code::2.1.123": "7fb981a21fc7196c",
     "claude-code::2.1.14": "6b2f9342532329f5",
     "claude-code::2.1.15": "85a1c64f32c83dc7",
     "claude-code::2.1.16": "b1c8247c665a560a",
@@ -304,6 +306,7 @@
     "news::/news/anthropic-nec": "1",
     "news::/news/australia-MOU": "4a11af2f3be85333",
     "news::/news/claude-design-anthropic-labs": "a2d47af045b5b4b3",
+    "news::/news/claude-for-creative-work": "1",
     "news::/news/claude-is-a-space-to-think": "5f3be1798adde7b6",
     "news::/news/claude-opus-4-7": "b8a01a75ea69bad8",
     "news::/news/claude-partner-network": "19915b89db26800b",
