@@ -1,6 +1,6 @@
 {
-  "last_activity_ts": "2026-04-29T11:01:06+00:00",
-  "last_email_ts": "2026-04-29T11:01:06+00:00",
+  "last_activity_ts": "2026-05-01T10:26:56+00:00",
+  "last_email_ts": "2026-05-01T10:26:56+00:00",
   "seen": {
     "claude-code::0.2.100": "5214220e87082a18",
     "claude-code::0.2.102": "cdb33496705b9a49",
@@ -202,6 +202,7 @@
     "claude-code::2.1.121": "235479346f358547",
     "claude-code::2.1.122": "3e5c2f98372ab407",
     "claude-code::2.1.123": "7fb981a21fc7196c",
+    "claude-code::2.1.126": "c5e2602fcc5023e2",
     "claude-code::2.1.14": "6b2f9342532329f5",
     "claude-code::2.1.15": "85a1c64f32c83dc7",
     "claude-code::2.1.16": "b1c8247c665a560a",
