@@ -1,6 +1,6 @@
 {
-  "last_activity_ts": "2026-05-01T10:26:56+00:00",
-  "last_email_ts": "2026-05-01T10:26:56+00:00",
+  "last_activity_ts": "2026-05-05T10:50:49+00:00",
+  "last_email_ts": "2026-05-05T10:50:49+00:00",
   "seen": {
     "claude-code::0.2.100": "5214220e87082a18",
     "claude-code::0.2.102": "cdb33496705b9a49",
@@ -203,6 +203,7 @@
     "claude-code::2.1.122": "3e5c2f98372ab407",
     "claude-code::2.1.123": "7fb981a21fc7196c",
     "claude-code::2.1.126": "c5e2602fcc5023e2",
+    "claude-code::2.1.128": "1af58e4a4c470412",
     "claude-code::2.1.14": "6b2f9342532329f5",
     "claude-code::2.1.15": "85a1c64f32c83dc7",
     "claude-code::2.1.16": "b1c8247c665a560a",
@@ -312,6 +313,7 @@
     "news::/news/claude-opus-4-7": "b8a01a75ea69bad8",
     "news::/news/claude-partner-network": "19915b89db26800b",
     "news::/news/election-safeguards-update": "1",
+    "news::/news/enterprise-ai-services-company": "1",
     "news::/news/google-broadcom-partnership-compute": "1a53dcfbad085d36",
     "news::/news/mozilla-firefox-security": "235810dd5e340d30",
     "news::/news/narasimhan-board": "1405d8f02ea2f7cf",
@@ -476,6 +478,8 @@
     "sdk-python::0.95.0 (2026-04-14)": "f7b6bbbb2843d606",
     "sdk-python::0.96.0 (2026-04-16)": "70663587776c118c",
     "sdk-python::0.97.0 (2026-04-23)": "0fe389027d35460d",
+    "sdk-python::0.98.0 (2026-05-04)": "51e7135d05e7067a",
+    "sdk-python::0.98.1 (2026-05-04)": "58ed63b9e216b298",
     "sdk-python::[0.3.10](https://github.com/anthropics/anthropic-sdk-python/compare/v0.3.9...v0.3.10) (2023-08-16)": "49fe5d84c898f1bd",
     "sdk-python::[0.3.11](https://github.com/anthropics/anthropic-sdk-python/compare/v0.3.10...v0.3.11) (2023-08-26)": "7187a8e55ff8d8d1",
     "sdk-python::[0.3.4](https://github.com/anthropics/anthropic-sdk-python/compare/v0.3.3...v0.3.4) (2023-07-11)": "a4b4fe7040902ca7",
