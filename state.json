@@ -1,6 +1,6 @@
 {
-  "last_activity_ts": "2026-05-08T10:43:35+00:00",
-  "last_email_ts": "2026-05-08T10:43:35+00:00",
+  "last_activity_ts": "2026-05-09T10:12:34+00:00",
+  "last_email_ts": "2026-05-09T10:12:34+00:00",
   "seen": {
     "claude-code::0.2.100": "5214220e87082a18",
     "claude-code::0.2.102": "cdb33496705b9a49",
@@ -208,6 +208,9 @@
     "claude-code::2.1.131": "c2e2a4835fd6d516",
     "claude-code::2.1.132": "2e31a74199aa5f5e",
     "claude-code::2.1.133": "7cec25aee229f558",
+    "claude-code::2.1.136": "5e7eee3d5742581b",
+    "claude-code::2.1.137": "f3926a93cbb0e843",
+    "claude-code::2.1.138": "88991ea72a4c4093",
     "claude-code::2.1.14": "6b2f9342532329f5",
     "claude-code::2.1.15": "85a1c64f32c83dc7",
     "claude-code::2.1.16": "b1c8247c665a560a",
