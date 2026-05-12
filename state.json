@@ -1,6 +1,6 @@
 {
-  "last_activity_ts": "2026-05-09T10:12:34+00:00",
-  "last_email_ts": "2026-05-09T10:12:34+00:00",
+  "last_activity_ts": "2026-05-12T11:24:50+00:00",
+  "last_email_ts": "2026-05-12T11:24:50+00:00",
   "seen": {
     "claude-code::0.2.100": "5214220e87082a18",
     "claude-code::0.2.102": "cdb33496705b9a49",
@@ -211,6 +211,7 @@
     "claude-code::2.1.136": "5e7eee3d5742581b",
     "claude-code::2.1.137": "f3926a93cbb0e843",
     "claude-code::2.1.138": "88991ea72a4c4093",
+    "claude-code::2.1.139": "50e39d78eb6e33bc",
     "claude-code::2.1.14": "6b2f9342532329f5",
     "claude-code::2.1.15": "85a1c64f32c83dc7",
     "claude-code::2.1.16": "b1c8247c665a560a",
@@ -331,6 +332,7 @@
     "news::/news/where-stand-department-war": "afa8dc87ed941957",
     "sdk-python::0.10.0 (2024-01-18)": "444caaff9d1854bd",
     "sdk-python::0.100.0 (2026-05-06)": "ab2406dd073d6b02",
+    "sdk-python::0.101.0 (2026-05-11)": "b833d24d816902d2",
     "sdk-python::0.11.0 (2024-01-23)": "cdf5eac37c13ecff",
     "sdk-python::0.12.0 (2024-01-25)": "51b9793b695c60d1",
     "sdk-python::0.13.0 (2024-01-30)": "e40a9e82395777e3",
