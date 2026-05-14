@@ -1,6 +1,6 @@
 {
-  "last_activity_ts": "2026-05-13T11:33:48+00:00",
-  "last_email_ts": "2026-05-13T11:33:48+00:00",
+  "last_activity_ts": "2026-05-14T11:19:50+00:00",
+  "last_email_ts": "2026-05-14T11:19:50+00:00",
   "seen": {
     "claude-code::0.2.100": "5214220e87082a18",
     "claude-code::0.2.102": "cdb33496705b9a49",
@@ -214,6 +214,7 @@
     "claude-code::2.1.139": "50e39d78eb6e33bc",
     "claude-code::2.1.14": "6b2f9342532329f5",
     "claude-code::2.1.140": "327fb7e3482d67e0",
+    "claude-code::2.1.141": "1746f7fcf56e75e1",
     "claude-code::2.1.15": "85a1c64f32c83dc7",
     "claude-code::2.1.16": "b1c8247c665a560a",
     "claude-code::2.1.17": "69f7664f75f632e6",
@@ -318,6 +319,7 @@
     "news::/news/australia-MOU": "4a11af2f3be85333",
     "news::/news/claude-design-anthropic-labs": "a2d47af045b5b4b3",
     "news::/news/claude-for-creative-work": "1",
+    "news::/news/claude-for-small-business": "1",
     "news::/news/claude-is-a-space-to-think": "5f3be1798adde7b6",
     "news::/news/claude-opus-4-7": "b8a01a75ea69bad8",
     "news::/news/claude-partner-network": "19915b89db26800b",
@@ -334,6 +336,7 @@
     "sdk-python::0.10.0 (2024-01-18)": "444caaff9d1854bd",
     "sdk-python::0.100.0 (2026-05-06)": "ab2406dd073d6b02",
     "sdk-python::0.101.0 (2026-05-11)": "b833d24d816902d2",
+    "sdk-python::0.102.0 (2026-05-13)": "0f0b721682eeda74",
     "sdk-python::0.11.0 (2024-01-23)": "cdf5eac37c13ecff",
     "sdk-python::0.12.0 (2024-01-25)": "51b9793b695c60d1",
     "sdk-python::0.13.0 (2024-01-30)": "e40a9e82395777e3",
