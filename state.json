@@ -1,4 +1,8 @@
 {
+  "baselined_prefixes": [
+    "engineering",
+    "news"
+  ],
   "last_activity_ts": "2026-05-14T11:19:50+00:00",
   "last_email_ts": "2026-05-14T11:19:50+00:00",
   "seen": {

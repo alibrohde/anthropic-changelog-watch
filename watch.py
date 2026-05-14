@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Watch Anthropic changelogs and email a digest when new items appear.
+"""Watch OpenAI + Anthropic changelogs and email a digest when new items appear.
 
 Detection is deterministic (sha256 of entry body vs state.json).
 
@@ -43,18 +43,6 @@ USER_AGENT = "claude-catcher/0.1 (+https://github.com/alibrohde/claude-catcher)"
 
 SOURCES = [
     {
-        "name": "Claude Code",
-        "url": "https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md",
-        "kind": "changelog_md",
-        "id_prefix": "claude-code",
-    },
-    {
-        "name": "Anthropic Python SDK",
-        "url": "https://raw.githubusercontent.com/anthropics/anthropic-sdk-python/main/CHANGELOG.md",
-        "kind": "changelog_md",
-        "id_prefix": "sdk-python",
-    },
-    {
         "name": "Anthropic engineering",
         "url": "https://www.anthropic.com/engineering",
         "kind": "link_index",
@@ -70,14 +58,20 @@ SOURCES = [
         "link_prefix": "/news/",
         "site": "https://www.anthropic.com",
     },
+    {
+        "name": "OpenAI news",
+        "url": "https://openai.com/news/rss.xml",
+        "kind": "rss",
+        "id_prefix": "openai-news",
+    },
 ]
 
-# Email output groups posts by source in this order. Builder-critical first.
+# Email output groups posts by source in this order. Anthropic first (most
+# builder-critical day-to-day), then OpenAI.
 SOURCE_ORDER = [
-    "Claude Code",
-    "Anthropic Python SDK",
     "Anthropic engineering",
     "Anthropic news",
+    "OpenAI news",
 ]
 
 # Slug substrings that signal a geo/region-specific announcement.
@@ -133,6 +127,45 @@ def parse_changelog_md(text: str, src):
             "body": body,
             "url": src["url"],
         })
+    return entries
+
+
+def _rss_field(item_xml: str, tag: str) -> str:
+    """Read a single tag's text out of an RSS <item> blob. Unwraps CDATA."""
+    m = re.search(
+        rf"<{tag}\b[^>]*>(?:<!\[CDATA\[(.*?)\]\]>|(.*?))</{tag}>",
+        item_xml,
+        flags=re.DOTALL | re.IGNORECASE,
+    )
+    if not m:
+        return ""
+    raw = m.group(1) if m.group(1) is not None else (m.group(2) or "")
+    return html.unescape(raw.strip())
+
+
+def parse_rss(text: str, src):
+    items = re.findall(r"<item\b[^>]*>(.*?)</item>", text, flags=re.DOTALL | re.IGNORECASE)
+    entries = []
+    skipped = []
+    for item in items:
+        link = _rss_field(item, "link")
+        if not link:
+            continue
+        slug = urllib.parse.urlparse(link).path
+        if _is_geo_irrelevant(slug):
+            skipped.append(slug)
+            continue
+        entries.append({
+            "id": f"{src['id_prefix']}::{slug}",
+            "title": _rss_field(item, "title"),
+            "summary": _rss_field(item, "description"),
+            "body": "",
+            "url": link,
+        })
+    if skipped:
+        log(f"filtered {len(skipped)} geo-irrelevant {src['id_prefix']} slugs: "
+            + ", ".join(s.rsplit('/', 1)[-1] for s in skipped[:6])
+            + ("..." if len(skipped) > 6 else ""))
     return entries
 
 
@@ -383,6 +416,7 @@ def send_email(subject: str, markdown_body: str) -> None:
 
 def collect_new(state):
     seen = state.setdefault("seen", {})
+    baselined = set(state.setdefault("baselined_prefixes", []))
     new_entries = []
     for src in SOURCES:
         try:
@@ -394,19 +428,36 @@ def collect_new(state):
             entries = parse_changelog_md(raw, src)
         elif src["kind"] == "link_index":
             entries = parse_link_index(raw, src)
+        elif src["kind"] == "rss":
+            entries = parse_rss(raw, src)
         else:
+            continue
+        # First time we've ever polled this source: silently absorb whatever's
+        # currently published so the watcher doesn't dump a backlog into your
+        # inbox. From the next run on, only new items surface.
+        if src["id_prefix"] not in baselined:
+            for e in entries:
+                if src["kind"] == "changelog_md":
+                    seen[e["id"]] = entry_hash(e)
+                else:
+                    seen[e["id"]] = "1"
+            baselined.add(src["id_prefix"])
+            state["baselined_prefixes"] = sorted(baselined)
+            log(f"baselined new source '{src['id_prefix']}': absorbed {len(entries)} entries silently")
             continue
         for e in entries:
             key = e["id"]
-            if src["kind"] == "link_index":
-                # Presence-only dedup: the URL is the identity. Only fetch article
-                # meta (og:title, og:description) when the slug is genuinely new.
+            if src["kind"] in ("link_index", "rss"):
+                # Presence-only dedup: the URL is the identity.
                 if key in seen:
                     continue
-                meta = fetch_article_meta(e["url"])
-                e["title"] = meta["title"] or e["url"].rsplit("/", 1)[-1].replace("-", " ")
-                e["summary"] = meta["summary"]
-                e["body"] = meta["body"]
+                if src["kind"] == "link_index":
+                    # Fetch article meta (og:title, og:description) only when the
+                    # slug is genuinely new. RSS items already carry title/description.
+                    meta = fetch_article_meta(e["url"])
+                    e["title"] = meta["title"] or e["url"].rsplit("/", 1)[-1].replace("-", " ")
+                    e["summary"] = meta["summary"]
+                    e["body"] = meta["body"]
                 h = "1"  # sentinel — any non-empty value is fine
             else:
                 # changelog_md: body-hash dedup catches edits to an existing
@@ -439,17 +490,54 @@ def maybe_send_heartbeat(state) -> bool:
         return False
     last_activity = state.get("last_activity_ts") or "(never since watcher started)"
     body = (
-        f"Nothing new across Anthropic's changelogs in the last {HEARTBEAT_DAYS} days.\n\n"
+        f"Nothing new across OpenAI + Anthropic's changelogs in the last {HEARTBEAT_DAYS} days.\n\n"
         f"Last actual change detected: {last_activity}\n\n"
         "Sources watched:\n"
         + "\n".join(f"- {s['name']}: {s['url']}" for s in SOURCES)
         + "\n\n(This is a weekly heartbeat so you know the watcher is alive.)"
     )
-    send_email("Anthropic changelog: nothing new", body)
+    send_email("OAI + Anthropic changelog: nothing new", body)
     state["last_email_ts"] = now_iso()
     save_state(state)
     log("sent heartbeat email")
     return True
+
+
+def smoke_test() -> int:
+    """Verify each source's fetch + parse path. Prints 5 most recent items per source.
+
+    Sends no email and writes no state. Run with: python3 watch.py --smoke-test
+    """
+    print("Smoke test - 5 most recent items per source. No email, no state changes.\n")
+    ok = True
+    for src in SOURCES:
+        print(f"=== {src['name']} ===")
+        print(f"  url: {src['url']}")
+        try:
+            raw = http_get(src["url"])
+        except Exception as e:
+            print(f"  FETCH FAILED: {e}\n")
+            ok = False
+            continue
+        print(f"  fetched OK ({len(raw):,} bytes)")
+        if src["kind"] == "changelog_md":
+            entries = parse_changelog_md(raw, src)
+        elif src["kind"] == "link_index":
+            entries = parse_link_index(raw, src)
+        elif src["kind"] == "rss":
+            entries = parse_rss(raw, src)
+        else:
+            entries = []
+        print(f"  parsed {len(entries)} entries")
+        for e in entries[:5]:
+            title = e.get("title") or "(title fetched at digest time)"
+            print(f"    - {title[:90]}")
+            print(f"      {e['url']}")
+        if not entries:
+            print("    (no entries parsed - parser may be broken)")
+            ok = False
+        print()
+    return 0 if ok else 1
 
 
 def main() -> int:
@@ -472,18 +560,18 @@ def main() -> int:
         state["last_activity_ts"] = now_iso()
         save_state(state)
         body = (
-            "Watcher is live. From now on you'll get an email when new entries appear in Anthropic's changelogs. "
+            "Watcher is live. From now on you'll get an email when new entries appear across OpenAI + Anthropic's changelogs. "
             f"If nothing changes for {HEARTBEAT_DAYS} days you'll get a one-line heartbeat so you know it's still alive.\n\n"
             "Sources watched:\n"
             + "\n".join(f"- {s['name']}: {s['url']}" for s in SOURCES)
         )
-        send_email("Anthropic changelog watcher is live", body)
+        send_email("OAI + Anthropic changelog watcher is live", body)
         log("sent first-run baseline email")
         return 0
 
     digest = format_entries(new_entries)
     subject_count = f"{len(new_entries)} new update" + ("s" if len(new_entries) != 1 else "")
-    subject = f"Anthropic changelog: {subject_count}"
+    subject = f"OAI + Anthropic changelog: {subject_count}"
     send_email(subject, digest)
     log(f"sent digest email ({subject_count})")
 
@@ -497,6 +585,8 @@ def main() -> int:
 
 if __name__ == "__main__":
     try:
+        if "--smoke-test" in sys.argv:
+            sys.exit(smoke_test())
         sys.exit(main())
     except Exception as e:
         log(f"FATAL: {type(e).__name__}: {e}")

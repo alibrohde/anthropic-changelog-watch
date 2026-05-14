@@ -1,19 +1,19 @@
 # Claude Catcher
 
-Anthropic ships constantly. Claude Catcher is how I stopped missing it.
+OpenAI and Anthropic both ship constantly. Claude Catcher is how I stopped missing it.
 
-Fork this repo. Hand it to Claude Code with one prompt. Twenty minutes later you get an email every time Anthropic adds a Claude Code release, an SDK release, a news post, or an engineering-blog post. Silent when nothing ships.
+Fork this repo. Hand it to Claude Code with one prompt. Twenty minutes later you get a single daily email any time either lab drops a new news post or engineering write-up. Silent when nothing ships.
 
 No servers. No cost. Runs on GitHub Actions. 100-ish lines of Python.
 
 ## What you get
 
 - An email in your inbox every time something new appears on:
-  - [Claude Code `CHANGELOG.md`](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
-  - [Anthropic Python SDK `CHANGELOG.md`](https://github.com/anthropics/anthropic-sdk-python/blob/main/CHANGELOG.md)
   - [anthropic.com/news](https://www.anthropic.com/news)
   - [anthropic.com/engineering](https://www.anthropic.com/engineering)
+  - [openai.com/news](https://openai.com/news) (via RSS)
 - A quiet weekly heartbeat so you know the watcher is still alive when nothing ships.
+- A silent baseline the first time a new source is added — you absorb the current backlog, not get it dumped in your inbox.
 - No LLM calls in the loop. Dedup is a sha256 check against a committed `state.json` — deterministic, auditable, free.
 
 ## Setup (for vibe coders)
@@ -28,19 +28,18 @@ That's it. Claude will ask you whether you have personal Gmail or Google Workspa
 ## What the setup actually does
 
 - Sets these GitHub Actions secrets in your fork: `GMAIL_USER`, `EMAIL_TO`, and either `GMAIL_APP_PASSWORD` (personal Gmail) or `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` + `GOOGLE_REFRESH_TOKEN` (Workspace).
-- Triggers the GitHub Actions workflow (`.github/workflows/watch.yml`), which runs every 2 hours on GitHub's infrastructure. Your laptop can be closed; the watcher doesn't care.
-- On the first run it records the current state of the four sources as a baseline and sends one confirmation email. From then on you only hear from it when something actually changes.
+- Triggers the GitHub Actions workflow (`.github/workflows/watch.yml`), which runs once a day on GitHub's infrastructure. Your laptop can be closed; the watcher doesn't care.
+- On the first run it records the current state of every source as a baseline and sends one confirmation email. From then on you only hear from it when something actually changes.
 
 ## Sources
 
 | Source | Kind | Parser |
 |---|---|---|
-| Claude Code | GitHub raw CHANGELOG.md | `changelog_md` |
-| Anthropic Python SDK | GitHub raw CHANGELOG.md | `changelog_md` |
 | Anthropic news | HTML link index (`/news/<slug>`) | `link_index` |
 | Anthropic engineering | HTML link index (`/engineering/<slug>`) | `link_index` |
+| OpenAI news | RSS feed (`openai.com/news/rss.xml`) | `rss` |
 
-Add more in [watch.py](watch.py) — append to `SOURCES`. Two kinds supported: `changelog_md` (raw markdown where `## heading` entries are items) and `link_index` (HTML page where links follow a `/<prefix>/<slug>` pattern).
+Add more in [watch.py](watch.py) — append to `SOURCES`. Three kinds supported: `changelog_md` (raw markdown where `## heading` entries are items), `link_index` (HTML page where links follow a `/<prefix>/<slug>` pattern), and `rss` (RSS 2.0 feed with `<item>` blocks). Any newly-added source absorbs its current backlog silently the first time it's polled, so you don't get a flood.
 
 ## Email paths
 
@@ -60,11 +59,19 @@ export GMAIL_APP_PASSWORD="abcd efgh ijkl mnop"  # or the OAuth triple
 python3 watch.py
 ```
 
+To verify each source's fetch + parser before relying on the daily run:
+
+```bash
+python3 watch.py --smoke-test
+```
+
+Prints the 5 most recent items per source to stdout. Sends no email, writes no state.
+
 Or just use the workflow — go to your fork's **Actions** tab, pick "watch", click **Run workflow**.
 
 ## Why this exists
 
-Anthropic's changelog, release notes, and engineering blog are four separate surfaces, all of which ship fast. Anyone building on top — vibe coders, agent hackers, founders shipping AI-native products — pays a tax to keep up manually. A cron + diff + email pipeline solves it, but "set up a cron + diff + email pipeline" isn't something most people want to do on a Tuesday night. So here's the pipeline, pre-built; hand it to Claude to wire into your accounts.
+OpenAI and Anthropic each publish across multiple surfaces (news, engineering, an RSS feed buried under `/news/rss.xml`) and ship fast. Anyone building on top — vibe coders, agent hackers, founders shipping AI-native products — pays a tax to keep up manually. A cron + diff + email pipeline solves it, but "set up a cron + diff + email pipeline" isn't something most people want to do on a Tuesday night. So here's the pipeline, pre-built; hand it to Claude to wire into your accounts.
 
 ## License
 

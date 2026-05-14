@@ -3,7 +3,7 @@
 Copy everything between the fences below, paste it into a new Claude Code session in your forked repo, and let Claude drive the setup.
 
 ```
-You are setting up Claude Catcher (claude-catcher) for me. Repo cloned locally, I'm the owner on GitHub. Goal: get a GitHub Actions cron running every 2 hours that emails me when Anthropic ships a new Claude Code / SDK release or news post.
+You are setting up Claude Catcher (claude-catcher) for me. Repo cloned locally, I'm the owner on GitHub. Goal: get a GitHub Actions cron running once a day that emails me when OpenAI or Anthropic ships a new news post or engineering write-up.
 
 Please do these steps, asking me only when you genuinely need input:
 
@@ -34,7 +34,7 @@ Please do these steps, asking me only when you genuinely need input:
 
 5. Trigger a manual run with `gh workflow run watch.yml` and watch the logs with `gh run watch`. Confirm the run succeeds.
 
-6. Tell me to watch my inbox for a "watcher is live" email on the first run. From then on, I only get email when Anthropic ships something new, or a weekly heartbeat if things are quiet.
+6. Tell me to watch my inbox for a "watcher is live" email on the first run. From then on, I only get email when OpenAI or Anthropic ships something new, or a weekly heartbeat if things are quiet.
 
 Show me each secret's name (but never its value) after you set it, so I know the list is complete. Don't print any secret value to the terminal — pipe straight into `gh secret set`.
 ```
