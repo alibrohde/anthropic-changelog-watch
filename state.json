@@ -4,8 +4,8 @@
     "news",
     "openai-news"
   ],
-  "last_activity_ts": "2026-05-15T17:56:03+00:00",
-  "last_email_ts": "2026-05-15T17:56:03+00:00",
+  "last_activity_ts": "2026-05-15T18:11:22+00:00",
+  "last_email_ts": "2026-05-15T18:11:22+00:00",
   "seen": {
     "claude-code::0.2.100": "5214220e87082a18",
     "claude-code::0.2.102": "cdb33496705b9a49",
@@ -1271,6 +1271,7 @@
     "openai-news::/index/why-we-no-longer-evaluate-swe-bench-verified": "1",
     "openai-news::/index/will-hurd-joins": "1",
     "openai-news::/index/wix": "1",
+    "openai-news::/index/work-with-codex-from-anywhere": "1",
     "openai-news::/index/wrtn": "1",
     "openai-news::/index/yabble": "1",
     "openai-news::/index/zelma": "1",
