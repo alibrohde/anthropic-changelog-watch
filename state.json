@@ -4,8 +4,8 @@
     "news",
     "openai-news"
   ],
-  "last_activity_ts": "2026-05-15T18:11:22+00:00",
-  "last_email_ts": "2026-05-15T18:11:22+00:00",
+  "last_activity_ts": "2026-05-16T10:20:58+00:00",
+  "last_email_ts": "2026-05-16T10:20:58+00:00",
   "seen": {
     "claude-code::0.2.100": "5214220e87082a18",
     "claude-code::0.2.102": "cdb33496705b9a49",
@@ -343,6 +343,9 @@
     "openai-news::/academy/applications-of-ai": "1",
     "openai-news::/academy/brainstorming": "1",
     "openai-news::/academy/codex-automations": "1",
+    "openai-news::/academy/codex-for-work/how-business-operations-teams-use-codex": "1",
+    "openai-news::/academy/codex-for-work/how-data-science-teams-use-codex": "1",
+    "openai-news::/academy/codex-for-work/how-sales-teams-use-codex": "1",
     "openai-news::/academy/codex-how-to-start": "1",
     "openai-news::/academy/codex-plugins-and-skills": "1",
     "openai-news::/academy/codex-settings": "1",
@@ -552,6 +555,7 @@
     "openai-news::/index/dall-e-now-available-in-beta": "1",
     "openai-news::/index/dall-e-now-available-without-waitlist": "1",
     "openai-news::/index/data-partnerships": "1",
+    "openai-news::/index/databricks": "1",
     "openai-news::/index/datadog": "1",
     "openai-news::/index/debate": "1",
     "openai-news::/index/decagon": "1",
